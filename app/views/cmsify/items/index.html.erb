@@ -1,0 +1,7 @@
+<% replace :header_utility do %>
+  <%= primary_button("Create new item", [cmsify, :new,  controller_namespace_symbol, :item], "uk-margin-right") %>
+<% end %>
+
+<%= render layout: "cmsify/partials/collection_tree" do %>
+  <%= render "list" %>
+<% end %>

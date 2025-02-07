@@ -1,0 +1,10 @@
+<% if invalid.errors.any? %>
+  <div id="error_explanation" class="alert error">
+    <dl>
+      <dt><%= pluralize(invalid.errors.count, "error") %> prohibited this <%= controller_class_name %> from being saved:</dt>
+      <% invalid.errors.full_messages.each do |message| %>
+        <dd><%= message %></dd>
+      <% end %>
+    </dl>
+  </div>
+<% end %>

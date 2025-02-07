@@ -1,0 +1,17 @@
+<div>
+  <section>
+    <aside>
+      <h2><%= controller_class_name.titleize.pluralize %></h2>
+      <%= link_to "Add an #{ controller_class_name }", [cmsify, :new, controller_class_symbol], class: 'button secondary uk-margin-bottom' %>
+    </aside>
+    <article>
+      <div class="card">
+        <ul class="uk-list">
+          <% @resources.each do |resource| %>
+            <li><%= link_to resource.name, [cmsify, :edit, resource] %></li>
+          <% end %>
+        </ul>
+      </div>
+    </article>
+  </section>
+</div>

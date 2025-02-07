@@ -1,0 +1,32 @@
+<table class="js-tablesort">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Collection</th>
+      <th class="uk-text-center">Status</th>
+      <th class="uk-text-right">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% items.each do |item| %>
+      <tr>
+        <td ><%= link_to item.name, [cmsify, :edit, item] %></td>
+        <td>
+          <%= item.collections.group_by(&:name).keys.join(", ") %>
+        </td>
+        <td class="uk-text-center">
+          <%= status_for_resource item %>
+        </td>
+        <td class="uk-text-right">
+          <button class="secondary icon-gear transparent js-webui-popover"></button>
+          <div class="webui-popover-content">
+            <ul class="uk-list uk-margin-remove">
+              <li><%= delete_button(item) %></li>
+              <li><%= state_toggle_button(item)  %></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

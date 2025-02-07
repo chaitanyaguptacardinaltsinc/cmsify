@@ -1,0 +1,37 @@
+.cmsify {
+  &-adminified {
+    position: relative;
+    min-height: 1.5rem;
+    outline: 1px solid orange;
+    &--inline {
+      display: inline-block;
+    }
+
+    &__content-bar {
+      position: absolute;
+      width: auto !important;
+      z-index: 979;
+      background-color: orange !important;
+      color: #eeeeee !important;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      padding: 0 5px !important;
+      a {
+        color: #eeeeee !important;
+        &:hover {
+          color: #ffffff !important;
+          text-decoration: none
+        }
+      }
+      + * {
+        margin-top: 0;
+      }
+    }
+    &__toolbar {
+      position: fixed;
+      left: 0;
+      z-index: 10000;
+      right: initial;
+    }
+  }
+}

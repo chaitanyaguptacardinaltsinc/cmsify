@@ -1,0 +1,14 @@
+<% index = 0 unless index %>
+<tr>
+  <td>
+    <div style="padding-left: <%= "#{ index * 20 }px" %>">
+      <%= link_to collection.name, [cmsify, :edit, collection] %>
+    </div>
+  </td>
+  <td class="uk-text-center cmsify-width-small">
+    <%= status_for_resource collection %>
+  </td>
+</tr>
+<% if collection.collections.any? %>
+    <%= render partial: "cmsify/collections/collection", collection: collection.collections, locals: { index: index + 1 } %>
+<% end %>

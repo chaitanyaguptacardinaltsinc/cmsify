@@ -1,0 +1,130 @@
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+<div x-data="editItem()">
+  <div id="add-new-asset" uk-modal="container: false; bg-close: false; stack: true">
+    <div class="uk-modal-dialog uk-margin-auto-vertical">
+      <div class="uk-modal-header">
+        <h4 class="uk-text-left">Upload New <%= resource_name.to_s.titleize %></h4>
+        <p class="uk-text-left uk-margin-remove">Upload only one asset to this collection</p>
+        <a class="uk-modal-close uk-close uk-position-top-right uk-margin uk-margin-right" uk-icon="icon: close"></a>
+      </div>
+      <div class="uk-modal-body">
+        <div class="js-dropzone-asset-upload"
+          x-bind:data-model="model"
+          x-bind:data-controller-namespace="controllerNamespace"
+          x-bind:data-target-resource-name="targetResourceName">
+          <%= simple_form_for([cmsify, ::Cmsify::Asset.new ], method: :post, html: { id: 'asset-dropzone', class: 'dropzone' }) do |f| %>
+            <div class="fallback">
+              <%= f.input :attachment, multiple: true %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="asset-picker"  class="uk-modal-container" uk-modal="container: false; stack: true">
+    <div class="uk-modal-dialog uk-margin-auto-vertical " uk-overflow-auto>
+      <div class="uk-modal-header">
+        <h4 class="uk-margin-remove uk-text-left">Select an asset</h4>
+
+        <a class="uk-modal-close uk-close uk-position-top-right uk-margin uk-margin-right" uk-icon="icon: close"></a>
+        <div class="uk-inline uk-margin-small-bottom uk-margin-small-top">
+            <span class="uk-form-icon" uk-icon="icon: search"></span>
+            <%= search_field_tag :searched_term, nil, placeholder: 'Search assets', data: {filter_search: "#asset-list"} %>
+        </div>
+      </div>
+      <div class="uk-modal-body uk-panel uk-panel-scrollable">
+        
+        <table class="cmsify-table--static">
+          <thead>
+            <tr>
+              <th colspan="2">Item</th>
+              <th class="cmsify-width-small uk-text-nowrap">Created at</th>
+              <th class="cmsify-width-small">Status</th>
+            </tr>
+          </thead>
+          <tbody id="asset-list">
+            <%  @assets.each do |asset| %>
+            <%
+              data_asset = {
+                id: asset.id,
+                url: asset.attachment.medium.url,
+                contentType: asset.content_type,
+                isImage: asset.image?,
+                filename: asset.attachment.file.filename,
+                extension: asset.attachment.file.extension
+
+              } 
+            %>
+              <tr
+                @click="handleSelectAsset(<%= data_asset.to_json %>)"
+                class="selectable"
+                style="cursor: pointer;"
+                x-bind:class="{'selected': (asset && asset.id) == <%= asset.id %>}"
+                >
+                <% if asset.persisted? %>
+                  <td class="cmsify-width-small">
+                    <% if asset.image? %>
+                      <%= image_tag asset.attachment.send('icon').url %>
+                    <% else %>
+                      <i class="icomoon-<%= asset.attachment.file.extension %> bloom-icon-large uk-text-muted"></i>
+                    <% end %>
+                  </td>
+                  <td><%= asset.filename %></td>
+                <% else %>
+                  <td colspan="2"><img src="#" alt="placeholder" /></td>
+                <% end %>
+                <td class="uk-text-center uk-text-nowrap">
+                  <%= asset.created_at.try(:strftime, "%m/%d/%Y") %>
+                </td>
+                <td class="uk-text-center">
+                  <%= status_for_resource asset %>
+                </td>
+               
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="uk-modal-footer uk-text-right">
+        <!-- TODO: Make the cancel button work using serialize -->
+        <div class="uk-flex uk-flex-right uk-flex-middle">
+          <div class="uk-margin-small-right" x-text="asset && asset.filename"></div>
+          <button  class="button secondary uk-modal-close uk-margin-small-right">Close</button>
+          <button x-bind:disabled="!asset" @click="handleSubmitSelectAsset" class="button primary uk-modal-close" autofocus>Select</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%= yield %>
+</div>
+<script>
+  function editItem() {
+    return {
+      open: false,
+      targetResourceName: null,
+      controllerNamespace: null,
+      model: null,
+      asset: null,
+      handleSubmitSelectAsset(e) {
+        // set asset ID
+        document.getElementById(`${this.controllerNamespace}_${this.model}_attached_${this.targetResourceName}_attributes_asset_id`)
+          .setAttribute("value", this.asset.id)
+        // set image or icon
+        let elem;
+        if (this.asset.isImage) {
+          elem = `<img src=${this.asset.url} alt="" class="cmsify-width-medium" />`
+        } else {
+          elem = `<i class="icomoon-${this.asset.extension} bloom-icon-large uk-text-muted"></i>`
+        }
+        let imageContainer = document.getElementById(`${this.controllerNamespace}_${this.model}_attached_${this.targetResourceName}_image_id`)
+        imageContainer.innerHTML = elem
+        imageContainer.nextElementSibling.innerText = this.asset.filename
+        document.getElementById(`${this.controllerNamespace}_${this.model}_attached_${this.targetResourceName}_remove_asset`).classList.remove('uk-hidden')
+        this.asset = null;
+      },
+      handleSelectAsset(asset) {
+        this.asset = asset
+      }
+
+    }
+  }
+</script>

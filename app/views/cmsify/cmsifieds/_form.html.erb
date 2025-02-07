@@ -1,0 +1,21 @@
+<%= cmsify_form_for([cmsify, @resource]) do |f| %>
+  <%= render partial: "cmsify/partials/invalid", locals: { invalid: @resource } %>
+  <section>
+    <article>
+      <div class="card">
+        <% Cmsify.config.fields_for_content_type_schema(controller_class_symbol).each do |field_name, field| %>
+          <%= cmsify_field(f, field_name, field) %>
+        <% end %>
+      </div>
+    </article>
+    <aside>
+      <% if Cmsify.config.fields_for_content_type_schema(controller_class_symbol).keys.include?(:state) %>
+        <%= cmsify_card do %>
+          <h4>Status</h4>
+          <%= render partial: "cmsify/partials/publish_state", locals: { f: f } %>
+        <% end %>
+      <% end %>
+    </aside>
+  </section>
+  <%= submit_section(f) %>
+<% end %>

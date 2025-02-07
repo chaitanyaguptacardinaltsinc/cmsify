@@ -1,0 +1,35 @@
+<%= render layout: "pages_tree", locals: { columns: ['Page', 'Status'] } do %>
+  <%= cmsify_form_for([cmsify, @page]) do |f| %>
+    <%= f.hidden_field :parent_id %>
+    <section>
+      <article>
+        <div class="card">
+          <div class="row">
+            <%= f.input :name %>
+          </div>
+          <div class="row">
+            <%= f.input :url do %>
+            <div class="input-group">
+              <span class="append"><%= @page.parent_path %></span>
+              <%= f.input_field :url %>
+            </div>
+            <% end %>
+          </div>
+          <div class="row">
+            <%= f.input :description, as: :text %>
+          </div>
+          <div class="row">
+            <%= f.input :template, collection: @templates, as: :radio_buttons %>
+          </div>
+        </div>
+      </article>
+      <aside>
+        <%= cmsify_card do %>
+          <h4>Status</h4>
+          <%= render partial: "cmsify/partials/publish_state", locals: { f: f } %>
+        <% end %>
+      </aside>
+    </section>
+    <%= submit_section(f) %>
+  <% end %>
+<% end %>

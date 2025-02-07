@@ -1,0 +1,169 @@
+<!-- TODO: This form should be a template instead of a partial. @collection.persisted? is used too many times -->
+<% add_collection_breadcrumbs(@collection) %>
+<%= render layout: "cmsify/partials/collection_tree" do %>
+  <%= cmsify_form_for(@collection, url: action) do |f| %>
+    <% replace :header_utility do %>
+      <%= f.submit 'Save', class: 'button primary', form: f.options[:html][:id] %>
+    <% end %>
+    <%= render partial: "cmsify/partials/invalid", locals: { invalid: @collection } %>
+    <%= cmsify_header("New collection") unless @collection.persisted? %>
+    <section>
+      <article class="uk-flex-column">
+        <div class="has-sections card">
+          <% if @collection.persisted? %>
+            <div class="card-section">
+              <div class="uk-flex uk-flex-between uk-flex-top">
+                <h3 class="uk-margin-remove"><%= f.object.name %></h3>
+                <div class="uk-flex uk-flex-middle">
+                  <button class="button secondary uk-margin-small-right js-select-existing uk-margin-bottom" type="button"
+                    data-target="#add-items" data-list="#collects"
+                    data-item-template="<%= html_escape_once(f.simple_fields_for(:collect, ::Cmsify::Collect.new) { |collect| render "collect_row", f: collect }) %>">Add existing items</button>
+                  <%= secondary_button("Create new item", [cmsify, :new,  @collection, :item], 'js-check-changed uk-margin-bottom uk-margin-small-right') %>
+                </div>
+              </div>
+              <table class="sf-table cmsify-table--static">
+                <thead>
+                  <tr>
+                    <th class="cmsify-width-small">Reorder</th>
+                    <th>Item</th>
+                    <% if @collection.apply_access_rules? && has_access_tags? %>
+                      <th>Access Tags</th>
+                    <% end %>
+                    <th class="uk-text-center cmsify-width-small">Status</th>
+                    <th class="uk-text-right cmsify-width-small">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="js-sortable" id="collects">
+                <% if @collection.collects.empty? %>
+                    <tr class="uk-block-empty">
+                      <td colspan="5"><p class="uk-text-muted uk-text-center">No items have been added to this collection</p></td>
+                    </tr>
+                <% else %>
+                  <%= f.simple_fields_for :collects do |collect| %>
+                    <%= render "collect_row", f: collect %>
+                  <% end %>
+                <% end %>
+                </tbody>
+              </table>
+            </div>
+            <div id="manage-child-collections" uk-modal="container: false;">
+              <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <div class="uk-modal-header">
+                  <h4 class="uk-margin-remove">Reorder collections</h4>
+                  <a class="uk-modal-close uk-close uk-position-top-right uk-margin uk-margin-right" uk-icon="icon: close"></a>
+                </div>
+                <div class="uk-modal-body uk-panel uk-panel-scrollable">
+                  <% if @collection.collections.any? %>
+                    <%= render partial: "collection_collections_table", locals: { f: f, collections: @collection.collections} %>
+                  <% end %>
+                </div>
+                <div class="uk-modal-footer uk-text-right">
+                  <button class="button secondary uk-margin uk-margin-small-right uk-modal-close">Cancel</button>
+                  <%= f.submit 'Save', class: 'button primary' %>
+                </div>
+              </div>
+            </div>
+            <div id="add-items" class="js-checkbox-modal uk-text-left" uk-modal="container: false;">
+              <div class="uk-modal-dialog uk-margin-auto-vertical">
+                <div class="uk-modal-header">
+                  <h4 class="uk-margin-remove">Select Items to Add to this Collection</h4>
+                  <div class="uk-inline uk-margin-small-bottom uk-margin-small-top">
+                      <span class="uk-form-icon" uk-icon="icon: search"></span>
+                      <%= search_field_tag :searched_term, nil, placeholder: 'Search items', data: {filter_search: "#item-list"} %>
+                  </div>
+                  <a class="uk-modal-close uk-close uk-position-top-right uk-margin uk-margin-right" uk-icon="icon: close"></a>
+                </div>
+                <div class="uk-modal-body uk-panel uk-panel-scrollable">
+                  <table class="table--static js-selectable-rows">
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th class="cmsify-width-small">Status</th>
+                        <th class="cmsify-width-small">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="item-list">
+                      <%= f.collection_check_boxes :item_ids, @items, :id, :name do |b| %>
+                        <tr>
+                          <td><%=b.object.name %></td>
+                          <td class="uk-flex-right">
+                            <%= status_for_resource b.object %>
+                          </td>
+                          <td class="uk-flex-right"><%= b.label {b.check_box} %></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="uk-modal-footer uk-text-right">
+                  <button class="button secondary uk-margin js-cancel-add-items uk-margin-small-right js-modal-cancel">Cancel</button>
+                  <button class="button primary js-modal-done" autofocus>Done</button>
+                </div>
+              </div>
+            </div>
+            <div uk-offcanvas="container: false; overlay: true;" id="offcanvas-collection">
+              <div class="uk-offcanvas-bar">
+                <div class="uk-overflow-auto uk-height-1-1 cmsify-offcanvas-overflow-container">
+                  <div class="card has-sections">
+                    <div class="card-section">
+                      <%= f.hidden_field :collection_id %>
+                      <h2>Collection Settings</h2>
+                      <% if f.object.persisted? %>
+                        <%= f.input :name %>
+                        <%= f.input :slug, wrapper_html: { class: "uk-margin" } %>
+                      <% end %>
+                    </div>
+                    <hr />
+                    <%= render partial: "cmsify/partials/image_upload_card", locals: {f: f, resource_name: 'featured_image', model: :collection} %>
+                    <hr />
+                    <% if has_access_tags? %>
+                      <div class="card-section">
+                        <h4>Settings</h4>
+                        <%= f.input :apply_access_rules, as: :boolean, label: "Apply access tag rules to items in this collection" %>
+                      </div>
+                      <hr />
+                    <% end %>
+                    <div class="card-section">
+                      <h4>Status</h4>
+                      <%= render partial: "cmsify/partials/publish_state", locals: {f: f} %>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="card-section uk-padding-remove-vertical uk-flex uk-flex-right uk-flex-middle uk-position-bottom cmsify-offcanvas-footer">
+                  <hr />
+                  <button class="button secondary uk-margin-small-right" type="button" uk-toggle="target: #offcanvas-collection">Cancel</button>
+                  <%= f.submit 'Save', class: 'button primary' %>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <div class="card-section">
+              <%= f.hidden_field :collection_id %>
+              <h4>Name</h4>
+              <%= f.input :name %>
+            </div>
+            <hr />
+            <%= render partial: "cmsify/partials/image_upload_card", locals: {f: f, resource_name: 'featured_image', model: :collection} %>
+            <hr />
+            <% if has_access_tags? %>
+            <div class="card-section">
+              <h4>Settings</h4>
+              <%= f.input :apply_access_rules, as: :boolean, label: "Apply access tag rules to items in this collection" %>
+            </div>
+            <hr />
+            <% end %>
+            <div class="card-section">
+              <h4>Status</h4>
+              <%= render partial: "cmsify/partials/publish_state", locals: {f: f} %>
+            </div>
+            <hr />
+          <% end %>
+        </div>
+      </article>
+    </section>
+    <% unless f.object.persisted? %>
+        <%= submit_section(f) %>
+    <% end %>
+  <% end %>
+<% end %>

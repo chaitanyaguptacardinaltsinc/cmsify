@@ -1,0 +1,22 @@
+
+<%= cmsify_section do %>
+  <div class="has-sections card">
+    <div class="card-section">
+      <%= form_tag([cmsify, controller_namespace_symbol, :items], method: :get, id: "filterForm") do %>
+        <div class="uk-grid-small uk-child-width-1-1 uk-child-width-1-2@m" uk-grid>
+          <div >
+            <%= search_field_tag :searched_term, params[:searched_term], placeholder: "Search #{controller_namespace_symbol.to_s.humanize.downcase} items", class: "js-filter-search" %>
+          </div>
+          <div>
+            <%= select_tag :collection, options_from_collection_for_select(@collections, :id, :name_with_ancestry, params[:collection]), class: "js-filter-input", prompt: "Filter by collection"  %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="card-section">
+       <%# TODO: figure out why the urls are not working %>
+      <%#= paginate @items,  params: {controller: 'items', action: :index }  %>
+      <%= render partial: "cmsify/partials/items_table", locals: {items: @items } %>
+    </div>
+  </div>
+<% end %>

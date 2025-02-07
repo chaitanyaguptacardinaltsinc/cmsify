@@ -1,0 +1,21 @@
+<%= cmsify_section do %>
+  <%= link_to 'Back to Asset Manager', [cmsify, :assets] %>
+  <div class="uk-flex uk-flex-middle uk-margin-bottom uk-margin-small-top">
+    <i class="icomoon-<%= @asset.attachment.file.extension %>  bloom-icon-large uk-margin-right uk-text-muted"></i>
+    <h2 class="uk-margin-remove"><%= @asset.filename %></h2>
+  </div>
+  <% if @asset.image? %>
+    <%= image_tag @asset.attachment.medium.url, class: "uk-margin-bottom" %>
+  <% end %>
+<% end %>
+<%= cmsify_section do %>
+  <div class="card">
+    <%= render partial: "asset_table", locals: {asset: @asset } %>
+  </div>
+<% end %>
+<%= cmsify_section do %>
+  <div class="uk-flex uk-flex-between">
+    <%= link_to "Delete asset", [cmsify, @asset], method: :delete, data: { confirm: 'Are you sure?' }, class: "button warning" %>
+    <%= link_to 'Done', [cmsify, :assets], class: "button" %>
+  </div>
+<% end %>

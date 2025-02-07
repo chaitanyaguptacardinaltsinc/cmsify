@@ -1,0 +1,47 @@
+<div class="card">
+  <%= f.simple_fields_for "attached_#{resource_name}".to_sym, f.object.send("attached_#{resource_name}") || f.object.send("build_attached_#{resource_name}") do |attached_fields|%>
+    <%= attached_fields.hidden_field :attachable_id %>
+    <%= attached_fields.hidden_field :attachable_type %>
+    <%= attached_fields.hidden_field :asset_id %>
+    <h4><%= resource_name.to_s.titleize %></h4>
+    <div class="js-<%= resource_name.to_s.dasherize %> js-attached">
+      <div class="uk-margin-bottom js-attached-preview">
+        <% if f.object.send(resource_name) %>
+          <div id="<%=controller_namespace_symbol%>_<%= model %>_attached_<%=resource_name%>_image_id">
+            <% if f.object.send(resource_name).try(:image?) %>
+              <%= image_tag f.object.send(resource_name).attachment.medium.url, class: "cmsify-width-medium" %>
+            <% else %>
+              <i class="icomoon-<%= f.object.send(resource_name).attachment.file.extension %> bloom-icon-large uk-text-muted"></i>
+            <% end %>
+          </div>
+          <p><%= f.object.send(resource_name).attachment.file.filename %></p>
+        <% else %>
+           <div id="<%=controller_namespace_symbol%>_<%= model %>_attached_<%=resource_name%>_image_id">
+           </div>
+           <p></p>
+        <% end %>
+      </div>
+      <div class="row">
+        <%= attached_fields.input :alt_title_text, label: "Image Alt Text",
+          input_html: { class: "js-attached-alt-title-text" } %>
+      </div>
+      <div class="uk-flex">
+        <button @click="model= '<%= model %>';controllerNamespace= '<%=controller_namespace_symbol%>'; targetResourceName= '<%= resource_name%>'" 
+        class="button secondary uk-margin-small-bottom uk-margin-small-right" 
+        uk-toggle="target: #asset-picker">Select Asset</button>
+        <button 
+          @click="model= '<%= model %>'; controllerNamespace= '<%=controller_namespace_symbol%>'; targetResourceName= '<%= resource_name%>'"
+           class="button secondary uk-margin-small-bottom js-modal-open" 
+           type="button" 
+           data-target="#add-new-asset">
+           Add New Asset
+           </button>
+        <div 
+          id="<%=controller_namespace_symbol%>_<%= model %>_attached_<%=resource_name%>_remove_asset" 
+          class="js-attached-remove-asset button secondary uk-margin-small-left uk-margin-small-bottom icon-trash <%= "uk-hidden" unless f.object.send(resource_name) %>">
+          <%= attached_fields.hidden_field :_destroy, as: :boolean %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

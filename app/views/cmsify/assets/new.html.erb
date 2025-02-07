@@ -1,0 +1,19 @@
+<%= cmsify_section do %>
+  <%= link_to 'Back', [cmsify, :assets] %>
+  <h2>Add Assets</h2>
+<% end %>
+
+<%= cmsify_section do %>
+  <div class="has-sections card">
+    <div class="card-section">
+      <div class="js-dropzone">
+        <%= simple_form_for([cmsify, @asset ], method: :post, html: { id: 'asset-dropzone', class: 'dropzone' }) do |f| %>
+          <div class="fallback">
+            <%= f.input :attachment, multiple: true %>
+          </div>
+        <% end %>
+        <%= link_to 'Done', [cmsify, :assets], class: "button uk-margin-top js-dropzone-done" %>
+      </div>
+    </div>
+  </div>
+<% end %>

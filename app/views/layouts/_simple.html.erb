@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= area :head do %>
+      <title><%= Cmsify.config.app_name %></title>
+      <%= csrf_meta_tags %>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+    <% end %>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>

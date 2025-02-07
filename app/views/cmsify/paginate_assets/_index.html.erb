@@ -1,0 +1,49 @@
+<%= paginate @assets, params: {controller: 'paginate_assets', action: :index }, remote: true %>
+<table class="js-tablesort">
+  <thead>
+    <tr>
+      <th class="cmsify-width-small" data-sorter="false"></th>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Created at</th>
+      <th>Size</th>
+      <th>Dimensions</th>
+      <th class="uk-text-right" data-sorter="false">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @assets.empty? %>
+      <tr class="uk-block-empty">
+        <td colspan="5"><p class="uk-text-muted uk-text-center">No assets have been added yet</p></td>
+      </tr>
+    <% else %>
+      <% @assets.each do |asset| %>
+        <tr>
+          <td >
+            <%= link_to [cmsify, asset] do %>
+              <% if asset.image? %>
+                <%= image_tag asset.attachment.small_thumb.url %>
+              <% else %>
+                <i class="icomoon-<%=asset.attachment.file.extension %> bloom-icon-large uk-text-muted"></i>
+              <% end %>
+            <% end %>
+          </td>
+          <td><%= link_to asset.filename, [cmsify, asset] %></td>
+          <td><%= asset.content_type %></td>
+          <td><%= asset.created_at.try(:strftime, "%m/%d/%Y") %></td>
+          <td><%= number_to_human_size(asset.size) %></td>
+          <td><%= "#{asset.width} x #{asset.height} pixels" if asset.image? %></td>
+          <td class="uk-text-right">
+            <button class="secondary transparent icon-gear js-webui-popover"></button>
+            <div class="webui-popover-content">
+              <ul class="uk-list uk-margin-remove">
+                <li><%= delete_button(asset) %></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<div>

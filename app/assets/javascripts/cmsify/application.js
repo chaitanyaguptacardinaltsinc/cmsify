@@ -1,0 +1,1 @@
+//= require cmsify_assets

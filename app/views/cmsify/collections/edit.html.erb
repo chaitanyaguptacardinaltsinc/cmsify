@@ -1,0 +1,3 @@
+<%= render layout: 'cmsify/partials/asset_picker' do %>
+  <%= render 'form', action: [cmsify, parent_collection_or_namespace, :collection, id: @collection.id] %>
+<% end %>

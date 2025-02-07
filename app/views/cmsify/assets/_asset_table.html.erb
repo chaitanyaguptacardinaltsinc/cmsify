@@ -1,0 +1,35 @@
+<table>
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Size</th>
+      <% if @asset.image? %>
+        <th>Dimensions</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><%= link_to @asset.filename, @asset.attachment.url, target: "_blank" %></td>
+        <td><%= number_to_human_size(@asset.size) %></td>
+        <% if @asset.image? %>
+          <td><%= "#{@asset.width} x #{@asset.height}" %></td>
+        <% end %>
+      </tr>
+      <% if @asset.image? %>
+        <% @asset.attachment.versions.each do |version, upload| %>
+          <tr>
+            <td>
+              <%= link_to upload.file.filename, upload.url, target: "_blank" %>
+            </td>
+            <td >
+              <%= number_to_human_size(upload.size) %>
+            </td>
+            <td>
+              <%= ::Cmsify::Asset::DIMENSIONS[version] %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+  </tbody>
+</table>

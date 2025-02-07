@@ -1,0 +1,16 @@
+<div id="collection-tree" style="position: fixed; top: 77px; bottom: 0;" class="cmsify-width-medium uk-flex uk-flex-column">
+  <div class="uk-card uk-height-1-1">
+    <% if defined?(columns) %>
+      <div class="uk-flex uk-flex-between uk-padding-small">
+        <% columns.each do |column| %>
+          <p class="uk-margin-remove"><%= column %></p>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="uk-panel uk-panel-scrollable" uk-height-viewport="offset-top: true;">
+      <ul class="uk-nav-default uk-nav-parent-icon" uk-nav="toggle: > div > .blm-uk-nav-toggle; duration: 50; multiple: true;">
+        <%= yield %>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="<%= "row" unless f.object.new_record? %>">
+  <%= f.input_field :state, collection: ::Cmsify::StateManager::PUBLISH_STATES, as: :radio_buttons, selected: :state %>
+</div>
+<% unless f.object.new_record? %>
+  <%= link_to([cmsify, f.object], method: :delete, data: { confirm: 'Are you sure?' }, class: 'button secondary') do %>
+    Delete content
+  <% end %>
+<% end %>

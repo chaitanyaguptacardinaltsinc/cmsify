@@ -1,0 +1,10 @@
+$('#assets-table').empty();
+$('#assets-table').append('<%= escape_javascript(render partial: 'index') %>');
+$(".js-webui-popover").each(function(e) {
+    $(this).webuiPopover({
+      container: "main",
+      placement: "left",
+      multi: false,
+      cache: false
+    });
+  });

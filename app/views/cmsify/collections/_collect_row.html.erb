@@ -1,0 +1,25 @@
+<tr>
+  <td>
+    <% if f.object.persisted? %>
+      <button class="icon-drag-handle drag transparent" type="button"></button>
+    <% end %>
+    <%= f.hidden_field :rank, class: "js-rank" %>
+    <%= f.hidden_field :id %>
+    <%= f.hidden_field :collectible_id %>
+  </td>
+  <td><%= link_to f.object.collectible.try(:name), (f.object.collectible.present? ? [cmsify, :edit,  @collection, :item, id: f.object.collectible.try(:id)] : '') %></td>
+  <% if @collection.apply_access_rules? %>
+    <td><%= f.object.collectible.cmsify_access_tags.to_sentence if f.object.collectible.present? %></td>
+  <% end %>
+  <td class="uk-text-center">
+    <%= status_for_resource f.object.collectible if f.object.persisted? %>
+  </td>
+  <td class="uk-text-right">
+    <% if f.object.persisted? %>
+      <button class="transparent secondary icon-gear js-webui-popover"></button>
+      <div class="webui-popover-content">
+        <%= collect_remove_button(f.object) %>
+      </div>
+    <% end %>
+  </td>
+</tr>

@@ -1,0 +1,9 @@
+<% replace :submit do %>
+  <%= back_button %>
+<% end %>
+<% replace :header_back do %>
+  <%= back_button %>
+<% end %>
+<%= render layout: 'cmsify/partials/asset_picker' do %>
+  <%= render "form", action: [cmsify, parent_collection_or_namespace, :items, id: @item.id] %>
+<% end %>

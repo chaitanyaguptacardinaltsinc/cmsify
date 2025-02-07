@@ -1,0 +1,9 @@
+<% replace :flash_class, "cmsify-container-right" %>
+<%= render layout: "cmsify/partials/tree", locals: { columns: ["Page", "Status"] } do %>
+  <% @pages.each do |page| %>
+    <%= descendents_accordion @page, page %>
+  <% end %>
+<% end %>
+<div class="cmsify-container-right">
+  <%= yield %>
+</div>

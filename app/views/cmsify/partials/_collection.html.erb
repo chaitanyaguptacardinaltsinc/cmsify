@@ -1,0 +1,14 @@
+<% index = 0 unless index %>
+<% any_collections = collection.collections.size > 0 %>
+<li class="<%="uk-parent" if any_collections %> <%= " uk-open" if @collection && @collection.has_ancestor?(collection) %>">
+  <div class="uk-flex uk-flex-middle blm-uk-nav-row" style="padding-left: <%= "#{ (index + 1) * 15 }px" %>">
+    <div class="uk-flex-none blm-uk-nav-spacer <%= "blm-uk-nav-toggle" if any_collections %>"></div>
+    <%= active_link_to collection.name, [cmsify, :edit, collection], class: "uk-flex-1" %>
+    <div class="uk-flex-none uk-margin-small-left"><%= collection.items_size  if collection.items_size > 0 %></div>
+  </div>
+  <ul class="uk-nav-default uk-nav-parent-icon" uk-nav="toggle: > div > .blm-uk-nav-toggle; multiple: true;">
+    <% if any_collections %>
+        <%= render partial: "cmsify/partials/collection", collection: collection.collections, locals: { index: index + 1 } %>
+    <% end %>
+  </ul>
+</li>

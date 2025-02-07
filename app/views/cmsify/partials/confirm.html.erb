@@ -1,0 +1,17 @@
+<%= render layout: "admin/bulk_actions/shop", locals: { title: "Bulk action: remove from waitlist" } do |f| %>
+  <div class="row uk-flex uk-flex-middle">
+    <%= f.input :send_activate_membership_bulk_action_notification, label: false, wrapper_html: { class: "flipswitch" } do %>
+      <%= f.check_box :send_activate_membership_bulk_action_notification, checked: f.object.send_activate_membership_bulk_action_notification?, class: "flipswitch-cb" %>
+      <%= f.label :send_activate_membership_bulk_action_notification, class: "flipswitch-label", data: { uk_toggle: "{target:'#notification'}"} do %>
+        <div class="flipswitch-inner"></div>
+        <div class="flipswitch-switch"></div>
+      <% end %>
+    <% end %>
+    <div class="uk-margin-left">
+      Send member notification
+    </div>
+  </div>
+  <%= f.input :bulk_action_activate_membership, as: :text, label: "Message",
+     wrapper_html: {id: "notification", class: "uk-animation-fade #{"uk-hidden" unless f.object.send_activate_membership_bulk_action_notification? }"},
+     input_html: { class: 'tinymce', value: f.object.bulk_action_activate_membership || t('settings.shop.bulk_action_activate_membership') } %>
+<% end %>

@@ -1,0 +1,30 @@
+<section>
+  <aside>
+    <h2>Manage page metadata</h2>
+    <p>Click on a URL to modify attributes of the webpage. To add a new page URL click 'Back to site'. Then click the page icon in the upper right hand corner of the page you want to add.</p>
+  </aside>
+  <article>
+    <div class="uk-width-1-1 card">
+      <table class="cmsify-table cmsify-table--static">
+        <thead>
+          <tr>
+            <th>URL</th>
+            <th class="uk-text-center cmsify-width-small">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @urls.each do |url| %>
+            <tr>
+              <td>
+                <%= link_to url.url, url_for([:edit, url]) %>
+              </td>
+              <td class="uk-text-center">
+                <%= status_for_resource url %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>

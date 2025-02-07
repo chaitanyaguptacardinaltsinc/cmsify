@@ -1,0 +1,6 @@
+<% replace :header_utility do %>
+  <%= link_to "Add Page", [cmsify, :new, :page], class: "button uk-margin-right" %>
+<% end %>
+
+<%= render layout: "pages_tree", locals: { columns: ['Page', 'Status'] } do %>
+<% end %>

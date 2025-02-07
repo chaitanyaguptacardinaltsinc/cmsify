@@ -1,0 +1,42 @@
+<% add_collection_breadcrumbs(@item) %>
+<%= cmsify_form_for(@item, url: action ) do |f| %>
+  <% replace :header_utility do %>
+    <%= f.submit 'Save', class: 'button primary', form: f.options[:html][:id] %>
+  <% end %>
+  <%= render partial: "cmsify/partials/invalid", locals: { invalid: @item } %>
+  <%= cmsify_header(controller_namespace.titleize) %>
+  <section class="full-width">
+    <article>
+      <%= cmsify_card do %>
+        <% Cmsify.config.fields_for_content_type_schema(controller_namespace_symbol, parent_collection.try(:configuration_type)).each do |field_name, field| %>
+          <%= cmsify_field(f, field_name, field) %>
+        <% end %>
+
+        <% Cmsify.config.attachment_fields_for_content_type_schema(controller_namespace_symbol, parent_collection.try(:configuration_type)).each do |field_name, field| %>
+          <%= render partial: "cmsify/partials/image_upload_card", locals: { f: f, resource_name: field_name, model: :item } %>
+        <% end %>
+
+        <%= replace :custom_item_fields do %>
+          <% Cmsify.config.image_fields_for_content_type_schema(controller_namespace_symbol, parent_collection.try(:configuration_type)).each do |field_name, field| %>
+            <%= render partial: "cmsify/partials/image_upload_card", locals: { f: f, resource_name: field_name, model: :item } %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </article>
+    <aside>
+      <%= cmsify_card do %>
+        <h4>Status</h4>
+        <%= render partial: "cmsify/partials/publish_state", locals: { f: f } %>
+      <% end %>
+
+      <% if should_show_permissions_for_item?(@item) && has_access_tags? %>
+        <%= render partial: "cmsify/partials/access_tags_check_boxes", locals: { f: f } %>
+      <% end %>
+
+      <%= area :custom_item_fields %>
+    </aside>
+  </section>
+  <%= submit_section(f) %>
+<% end %>
+
+<%= area :custom_secondary_form %>

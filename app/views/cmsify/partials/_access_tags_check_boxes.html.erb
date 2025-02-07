@@ -1,0 +1,11 @@
+<%= cmsify_card do %>
+  <h4>Access Tags</h4>
+  <% Cmsify.config.access_tags.each do |group_name, tags| %>
+    <h5><%= group_name.to_s.humanize %></h5>
+    <div class="uk-margin-bottom">
+      <%= f.collection_check_boxes "cmsify_access_tags_#{ group_name.to_s.singularize }_list".to_sym, tags.map { |tag| [tag] }, :first, :first do |b| %>
+        <%= b.label { b.check_box + b.object.first } %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

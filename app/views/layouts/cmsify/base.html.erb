@@ -1,0 +1,10 @@
+<%= extends "layouts/cmsify/application" do %>
+  <div class="content">
+    <div class="<%= area :flash_class %>">
+      <% cmsify_flash %>
+    </div>
+    <div class="cmsify-margin-medium-top uk-margin-medium-bottom">
+      <%= yield %>
+    </div>
+  </div>
+<% end %>

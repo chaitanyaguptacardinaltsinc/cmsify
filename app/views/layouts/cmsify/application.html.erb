@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= area :head do %>
+      <title><%= Cmsify.config.app_name %></title>
+      <%= csrf_meta_tags %>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <%= stylesheet_link_tag    '//cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/css/uikit.min.css', media: 'all', 'data-turbolinks-track': 'reload' %>
+      <%= stylesheet_link_tag    '//cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css', media: 'all', 'data-turbolinks-track': 'reload' %>
+      <%= stylesheet_link_tag    'cmsify/application', media: 'all', 'data-turbolinks-track': 'reload' %>
+      <%= stylesheet_link_tag    '//d1azc1qln24ryf.cloudfront.net/29147/CMSify20/style-cf.css?i2x2lm', media: 'all', 'data-turbolinks-track': 'reload' %>
+
+
+      <% if Cmsify.config.stylesheet.present? %>
+        <%= stylesheet_link_tag    Cmsify.config.stylesheet, media: 'all', 'data-turbolinks-track': 'reload' %>
+      <% end %>
+
+      <%= javascript_include_tag '//cdn.tiny.cloud/1/za6ak81539pgbrultbd6e78c5ja4cgrhm7w7iqrwv17c91ix/tinymce/5/tinymce.min.js', "data-turbolinks-track" => true %>
+      <%= javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/js/uikit.min.js', "data-turbolinks-track" => true %>
+      <%= javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.40/js/uikit-icons.min.js', "data-turbolinks-track" => true %>
+      <%= javascript_include_tag '//cdn.jsdelivr.net/npm/flatpickr', "data-turbolinks-track" => true %>
+      <%= javascript_include_tag 'cmsify/application', 'data-turbolinks-track': 'reload' %>
+    <% end %>
+  </head>
+  <body>
+    <div class="uk-offcanvas-content">
+      <div class="uk-container uk-container-expand uk-navbar-container" uk-sticky>
+        <nav uk-navbar>
+          <div class="uk-navbar-left">
+              <%= link_to('/', class: "uk-navbar-item cmsify-text-underline-remove cmsify-brand") do %>
+               <%= sanitize Cmsify.config.branding %>
+              <% end %>
+              <% if !defined?(current_admin) || (defined?(current_admin) && admin_signed_in?) %>
+                <ul class="blm-tab">
+                  <%= active_link_to [cmsify, :content], class_active: "uk-active", wrap_tag: 'li' do %>
+                    <i class="icomoon-files "></i>Content
+                  <% end %>
+                  <%= active_link_to [cmsify, :urls], class_active: "uk-active", wrap_tag: 'li' do %>
+                    <i class="icomoon-windows "></i>URLs
+                  <% end %>
+                  <%= active_link_to [cmsify, :pages], class_active: "uk-active", wrap_tag: 'li' do %>
+                    <i class="icomoon-windows "></i>Pages
+                  <% end %>
+                  <%= active_link_to [cmsify, :assets], class_active: "uk-active", wrap_tag: 'li' do %>
+                    <i class="icomoon-image "></i>Assets
+                  <% end %>
+                  <% if Cmsify.config.cmsified_resources.any? %>
+                    <% Cmsify.config.cmsified_resources.each do |cmsified_resource| %>
+                      <%= active_link_to [cmsify, cmsified_resource.to_sym], class_active: "uk-active", wrap_tag: 'li'  do %>
+                        <i class="icomoon-<%= cmsified_resource.to_s %> "></i><%= cmsified_resource.to_s.titleize %>
+                      <% end %>
+                    <% end %>
+                  <% end %>
+                  <%= render partial: "cmsify/partials/admin_toolbar"  %>
+                </ul>
+              <% end %>
+          </div>
+          <div class="uk-navbar-right">
+            <%= area :header_back do %>
+              <% if session[:cmsify_return_url].present? %>
+                <%= link_to 'Back to site', session[:cmsify_return_url], class: 'button secondary uk-margin-small-right' %>
+              <% end %>
+            <% end %>
+            <%= area :header_utility do %>
+              <% if Cmsify.config.sign_out_path.present? && defined?(current_admin) && admin_signed_in? %>
+                <%= link_to 'Logout', Cmsify.config.sign_out_path, method: :delete, class: 'button secondary' %>
+              <% end %>
+            <% end %>
+          </div>
+        </nav>
+      </div>
+      <main role="main" uk-height-viewport="offset-top: true; offset-bottom: true;">
+        <%= yield %>
+      </main>
+      <div class="js-unsaved-modal uk-modal">
+        <div class="uk-modal-dialog">
+          <div class="uk-modal-header">
+            <h3 class="uk-modal-title uk-text-left">You have unsaved changes on this page</h3>
+            <a class="uk-modal-close uk-close uk-position-top-right uk-margin uk-margin-right" uk-icon="icon: close"></a>
+          </div>
+          <div class="uk-modal-body">
+            <p>If you leave this page, all unsaved changes will be lost. Are you sure you want to leave this page?</p>
+          </div>
+          <div class="uk-modal-footer">
+            <div class="uk-flex uk-flex-right">
+              <a class="button secondary uk-modal-close uk-flex-right uk-margin-small-right">Cancel</a>
+              <button class="button warning js-modal-confirm">Leave</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

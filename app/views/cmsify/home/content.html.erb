@@ -1,0 +1,46 @@
+<% if @content_types.any? %>
+  <%= render layout: "cmsify/partials/collection_tree" do %>
+    <section>
+      <article class="uk-flex-column">
+        <div class="card uk-text-center">
+          <h2> Hello, <%= current_admin.first_name if defined?(current_admin)%>!</h2>
+          <p>Use the navigation panel on the left to navigate through your collections.</p>
+        </div>
+      </article>
+    </section>
+  <% end %>
+<% else %>
+  <%= cmsify_section do %>
+    <%= cmsify_card do %>
+      <h4>You must add a configuration file. Eg. `config/initializers/cmsify.rb`</h4>
+      <pre>
+        Cmsify.setup do |config|
+          config.app_name = "Dealer Portal CMS"
+          config.stylesheet = 'https://example.com/path/to/stylesheet.css'
+          config.branding = %(&lt;i class="icomoon-superfeet "&gt;&lt;/i&gt;
+            &lt;div class="uk-margin-small-left"&gt;#{ config.app_name }&lt;/div&gt;)
+          config.sign_out_path = '/admins/sign_out'
+          config.schema = {
+            content_block: {
+              name: { type: :string, required: true },
+              body: { type: :text },
+              background_image: { type: :attachment }
+            },
+            news: {
+              name: { type: :string, required: true },
+              published_at: { type: :datetime, required: true, label: "Publish Date" },
+              excerpt: { type: :text, required: true, hint: "Character limit: 140" },
+              body: { type: :text },
+              hero_image: { type: :attachment }
+            },
+            resource: {
+              name: { type: :string, required: true },
+              thumbnail_image: { type: :image },
+              download: { type: :attachment }
+            }
+          }
+        end
+      </pre>
+    <% end %>
+  <% end %>
+<% end %>

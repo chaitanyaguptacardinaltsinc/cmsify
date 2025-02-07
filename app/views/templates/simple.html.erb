@@ -1,0 +1,12 @@
+<%= render layout: "layouts/simple" do %>
+  <h1><%= @page.name %></h1>
+  hi
+  <%= cmsify_content_for "ContentBlock : Collection : #{ @page.permaname } : Description" do |t| %>
+    <%= t.template_for :items, {
+        container: { class: "uk-text-large" },
+        default: '<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>'.html_safe
+      } do |item| %>
+      <%= item.body.html_safe %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,17 @@
+<table class="cmsify-table--static">
+  <thead>
+    <tr>
+      <th>Collection</th>
+      <th class="cmsify-width-small">Status</th>
+    </tr>
+  </thead>
+  <tbody <%= "class='js-sortable' data-sort-action='#{sort_path}'" if defined?(sort_path) %>>
+  <% if collections.empty? %>
+      <tr class="uk-block-empty">
+        <td colspan="5"><p class="uk-text-muted uk-text-center">No collections have been created yet.</p></td>
+      </tr>
+  <% else %>
+    <%= render(partial: "cmsify/collections/collection", collection: collections) %>
+  <% end %>
+  </tbody>
+</table>

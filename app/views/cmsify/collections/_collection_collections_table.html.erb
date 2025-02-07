@@ -1,0 +1,37 @@
+<table class="cmsify-table cmsify-table--static">
+  <thead>
+    <tr>
+      <th class="uk-text-center cmsify-width-small">Reorder</th>
+      <th>Item</th>
+      <th class="uk-text-center cmsify-width-small">Status</th>
+      <th class="uk-text-right cmsify-width-small">Actions</th>
+    </tr>
+  </thead>
+  <tbody class="js-sortable">
+  <% if collections.empty? %>
+      <tr class="uk-block-empty">
+        <td colspan="5"><p class="uk-text-muted uk-text-center">No collections have been created yet.</p></td>
+      </tr>
+  <% else %>
+    <%= f.simple_fields_for :collections do |collection_fields| %>
+      <tr>
+        <td class="uk-text-center">
+          <button class="icon-drag-handle drag transparent" type="button"></button>
+          <%= collection_fields.hidden_field :rank, class: "js-rank" %>
+        </td>
+        <td><%= link_to collection_fields.object.name, [cmsify, :edit,  collection_fields.object] %></td>
+        <td class="uk-text-center">
+          <%= status_for_resource collection_fields.object %>
+        </td>
+        <td class="uk-text-right">
+          <button class="transparent secondary icon-gear js-webui-popover"></button>
+          <div class="webui-popover-content">
+            <%= delete_button(collection_fields.object) %>
+            <%= state_toggle_button(collection_fields.object) %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,27 @@
+<% replace :flash_class, "cmsify-container-right" %>
+<%= render layout: "cmsify/partials/tree", locals: { columns: ["Collections", "Actions"] } do %>
+  <% @content_types.each do |content_type| %>
+    <% has_collections = @collection_groups[content_type].try(:size) %>
+    <li class="<%="uk-parent" if has_collections %><%= " uk-open" if is_active_link?(url_for([cmsify, content_type, :items]), [["cmsify/#{content_type}/collections", "cmsify/#{content_type}/items"], []]) %>">
+      <div class="uk-flex uk-flex-middle blm-uk-nav-row">
+        <div class="uk-flex-none blm-uk-nav-spacer <%="blm-uk-nav-toggle" if has_collections %>"></div>
+        <%= active_link_to content_type.to_s.titleize.pluralize, [cmsify, content_type, :items], active: :exclusive,  class: "uk-flex-1" %>
+        <div class="uk-flex-none uk-margin-small-left">
+          <% if is_active_link?(url_for([cmsify, content_type, :items]), :exclusive) %>
+            <%= link_to "", [cmsify, :new, content_type, :collection], class: "button transparent secondary icon-addcircle" %>
+          <% end %>
+        </div>
+      </div>
+      <% if has_collections %>
+        <ul class="uk-nav-default uk-nav-parent-icon" uk-nav="toggle: > div > .blm-uk-nav-toggle; multiple: true;">
+          <% @collection_groups[content_type].each do |collection| %>
+            <%= descendents_accordion @collection, collection %>
+          <% end %>
+        </ul>
+      <% end %>
+    </li>
+  <% end %>
+<% end %>
+<div class="cmsify-container-right">
+  <%= yield %>
+</div>

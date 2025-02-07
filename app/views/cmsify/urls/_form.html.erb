@@ -1,0 +1,25 @@
+<%= cmsify_form_for([cmsify, @url]) do |f| %>
+  <section>
+    <article>
+      <div class="card">
+        <div class="row">
+          <%= f.hidden_field :url, value: f.object.url || params[:url] %>
+          URL: <span class="subdued"><%= f.object.url || params[:url] %></span> <%= link_to "View page", f.object.url || params[:url], target: "_blank" %>
+        </div>
+        <div class="row">
+          <%= f.input :title %>
+        </div>
+        <div class="row">
+          <%= f.input :description, as: :text %>
+        </div>
+      </div>
+    </article>
+    <aside>
+      <%= cmsify_card do %>
+        <h4>Status</h4>
+        <%= render partial: "cmsify/partials/publish_state", locals: { f: f } %>
+      <% end %>
+    </aside>
+  </section>
+  <%= submit_section(f) %>
+<% end %>

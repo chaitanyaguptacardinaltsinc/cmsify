@@ -1,0 +1,20 @@
+<% replace :header_utility do %>
+  <%= link_to "Add Assets", [cmsify, :new, :asset], class: "button uk-margin-right" %>
+<% end %>
+<%= cmsify_section do %>
+  <h2>Assets</h2>
+  <div class="has-sections card">
+    <div class="card-section">
+      <%= form_tag([cmsify, :assets], method: :get, id: "filterForm") do %>
+        <div uk-grid>
+          <div class="uk-width-1-1 uk-width-1-3@m">
+            <%= search_field_tag :searched_term, params[:searched_term], placeholder: 'Search Assets', class: "js-filter-search" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="card-section" id="assets-table">
+      <%= render "cmsify/paginate_assets/index" %>
+    </div>
+  </div>
+<% end %>
