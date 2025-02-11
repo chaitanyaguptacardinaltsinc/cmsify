@@ -29,7 +29,7 @@ module Cmsify
   extend ActiveSupport::Autoload
 
   autoload :Cmsified
-
+  autoload :Schemable
   RESOURCE_TYPES = [:item, :collection]
 
   class << self
