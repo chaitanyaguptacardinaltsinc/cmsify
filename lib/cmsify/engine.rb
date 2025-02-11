@@ -4,10 +4,8 @@ module Cmsify
     isolate_namespace Cmsify
 
     initializer "cmsify.zeitwerk", before: :set_autoload_paths do |app|
-     
       Rails.autoloaders.main.push_dir(root.join('lib').to_s)
       Rails.autoloaders.main.push_dir(root.join('lib/cmsify').to_s)
-      Rails.autoloaders.main.push_dir(root.join('lib/cmsify/klass').to_s)
       
       # If you need to keep concerns in the original location
       Rails.autoloaders.main.collapse(
