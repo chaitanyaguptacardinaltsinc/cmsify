@@ -1,4 +1,5 @@
-  class Cmsify::Configuration
+module Cmsify
+  class Configuration
     attr_accessor :app_name, :sign_out_path, :stylesheet, :branding, :asset_store_dir, :cmsified,
       :asset_storage, :access_tags
 
@@ -111,3 +112,4 @@
       end
     end
   end
+end  
