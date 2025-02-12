@@ -1,4 +1,4 @@
-require 'active_support/concern'
+require_dependency 'active_support/concern'
 
 module Cmsify
   module Schemable
