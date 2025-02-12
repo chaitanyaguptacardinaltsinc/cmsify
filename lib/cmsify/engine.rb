@@ -1,37 +1,31 @@
-# lib/cmsify/engine.rb
 module Cmsify
   class Engine < ::Rails::Engine
     isolate_namespace Cmsify
 
     initializer "cmsify.zeitwerk", before: :set_autoload_paths do |app|
-      engine_root = root
-
-      # Add main lib directory to autoload paths
-      Rails.autoloaders.main.push_dir(engine_root.join('lib').to_s)
+      engine_root = root.to_s
       
-      # Add specific cmsify directory to autoload paths
-      Rails.autoloaders.main.push_dir(engine_root.join('lib/cmsify').to_s)
-      
-      # Handle concerns directory
-      concerns_path = engine_root.join('lib/concerns/cmsify').to_s
-      if Dir.exist?(concerns_path)
-        Rails.autoloaders.main.collapse(concerns_path)
+      # Add all necessary load paths
+      %w(lib lib/cmsify lib/concerns).each do |path|
+        full_path = File.join(engine_root, path)
+        Rails.autoloaders.main.push_dir(full_path) if Dir.exist?(full_path)
       end
 
-      # Configure eager load paths
-      config.eager_load_paths << engine_root.join('lib').to_s
-      config.eager_load_paths << engine_root.join('lib/cmsify').to_s
+      # Handle nested modules
+      Rails.autoloaders.main.collapse(
+        "#{engine_root}/lib/concerns/cmsify",
+        "#{engine_root}/lib/cmsify"
+      )
+
+      # Ignore certain paths if needed
+      Rails.autoloaders.main.ignore(
+        "#{engine_root}/lib/tasks",
+        "#{engine_root}/lib/generators"
+      )
     end
 
     config.to_prepare do
-      if defined?(Cmsifier)
-        Cmsifier.cmsify 
-      end
-    end
-
-    # Add after_initialize hook to ensure all constants are properly loaded
-    config.after_initialize do
-      Cmsify::Klass.descendants.each(&:reload)
+      Cmsifier.cmsify if defined?(Cmsifier)
     end
   end
 end
