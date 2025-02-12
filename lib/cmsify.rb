@@ -19,6 +19,7 @@ require "active_model_serializers"
 require "recursive-open-struct"
 require "font-awesome-rails"
 require_relative "cmsify/configuration"
+require_relative "cmsify/klass"
 begin
   require 'rails/engine'
   require 'cmsify/engine'
