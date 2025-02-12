@@ -1,5 +1,7 @@
+# lib/cmsify/klass.rb
 module Cmsify
   class Klass
+    attr_reader :module_name, :class_name, :parent_class, :module_path_name, :schema
     def initialize(attributes = {})
       # TODO: This initialization is starting to smell funny. Need to refactor
       super()
