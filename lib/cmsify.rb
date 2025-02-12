@@ -30,6 +30,7 @@ module Cmsify
 
   autoload :Cmsified
   autoload :Schemable
+  autoload :Klass
   RESOURCE_TYPES = [:item, :collection]
 
   class << self
