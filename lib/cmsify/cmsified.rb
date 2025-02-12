@@ -1,4 +1,4 @@
-require_dependency 'concerns/cmsify/schemable'
+require_relative 'concerns/cmsify/schemable'
 
 module Cmsify
   module Cmsified
