@@ -1,4 +1,6 @@
 module Cmsify
-  class Klass::Attached < Klass
+  class Klass
+    class Attached
+    end
   end
 end
