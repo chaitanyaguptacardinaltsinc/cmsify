@@ -20,6 +20,7 @@ require "recursive-open-struct"
 require "font-awesome-rails"
 require_relative "cmsify/configuration"
 require_relative "cmsify/klass"
+require_relative "cmsify/schemable"
 begin
   require 'rails/engine'
   require 'cmsify/engine'
