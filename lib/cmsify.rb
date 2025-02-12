@@ -18,8 +18,18 @@ require "cocoon"
 require "active_model_serializers"
 require "recursive-open-struct"
 require "font-awesome-rails"
+require_relative "cmsify/configuration"
+begin
+  require 'rails/engine'
+  require 'cmsify/engine'
+  rescue LoadError
+end
 
 module Cmsify
+  extend ActiveSupport::Autoload
+
+  autoload :Cmsified
+  autoload :Schemable
   RESOURCE_TYPES = [:item, :collection]
 
   class << self
@@ -44,16 +54,6 @@ module Cmsify
   def self.root
     File.dirname __dir__
   end
-end
-# Require files in dependency order
-require_relative "cmsify/configuration"
-require_relative "cmsify/schemable" if File.exist?(File.join(__dir__, 'cmsify/schemable.rb'))
-require_relative "cmsify/cmsified" if File.exist?(File.join(__dir__, 'cmsify/cmsified.rb'))
-
-begin
-  require 'rails/engine'
-  require_relative 'cmsify/engine'
-rescue LoadError
 end
 
 ActiveSupport.on_load(:active_record) do
