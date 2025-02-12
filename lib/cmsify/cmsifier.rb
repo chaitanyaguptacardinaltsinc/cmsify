@@ -1,8 +1,8 @@
-require_dependency 'cmsify/klass/attached'
-require_dependency 'cmsify/klass/collection'
-require_dependency 'cmsify/klass/item'
-require_dependency 'cmsify/klass/collections_controller'
-require_dependency 'cmsify/klass/items_controller'
+require_relative 'cmsify/klass/attached'
+require_relative 'cmsify/klass/collection'
+require_relative 'cmsify/klass/item'
+require_relative 'cmsify/klass/collections_controller'
+require_relative 'cmsify/klass/items_controller'
 
 module Cmsify
   class Cmsifier
