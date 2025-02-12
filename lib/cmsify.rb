@@ -22,7 +22,6 @@ require_relative "cmsify/configuration"
 require_relative "cmsify/klass"
 require_relative "cmsify/schemable"
 require_relative "cmsify/cmsifier"
-require_relative "cmsify/klass/Attached"
 begin
   require 'rails/engine'
   require 'cmsify/engine'
@@ -35,8 +34,7 @@ module Cmsify
   autoload :Cmsified
   autoload :Schemable
   autoload :Klass
-  autoload :Klass
-  autoload :Attached
+  autoload :Cmsified
   RESOURCE_TYPES = [:item, :collection]
 
   class << self
