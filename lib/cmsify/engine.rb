@@ -8,7 +8,7 @@ module Cmsify
       # Add the correct paths
       Rails.autoloaders.main.push_dir(engine_root.join('lib').to_s)
       Rails.autoloaders.main.push_dir(engine_root.join('lib/cmsify').to_s)
-      Rails.autoloaders.main.collapse("#{engine_root}/lib/concerns/cmsify")
+      Rails.autoloaders.main.push_dir(engine_root.join('lib/concerns/cmsify').to_s)
     end
 
     config.to_prepare do
