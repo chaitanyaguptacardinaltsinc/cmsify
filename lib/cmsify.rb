@@ -19,9 +19,6 @@ require "active_model_serializers"
 require "recursive-open-struct"
 require "font-awesome-rails"
 require_relative "cmsify/configuration"
-require_relative "cmsify/klass"
-require_relative "cmsify/schemable"
-require_relative "cmsify/cmsifier"
 begin
   require 'rails/engine'
   require 'cmsify/engine'
@@ -34,7 +31,6 @@ module Cmsify
   autoload :Cmsified
   autoload :Schemable
   autoload :Klass
-  autoload :Cmsified
   RESOURCE_TYPES = [:item, :collection]
 
   class << self
